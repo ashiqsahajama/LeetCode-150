@@ -1,4 +1,4 @@
-# LeetCode 71: Simplify Path
+# LeetCode 58: Length of Last Word
 
 ## Table of Contents
 - [Problem Explanation](#problem-explanation)
@@ -11,54 +11,45 @@
 
 ## Problem Explanation
 
-- **Problem Link**: [LeetCode Problem](https://leetcode.com/problems/simplify-path/)
+- **Problem Link**: [LeetCode Problem](https://leetcode.com/problems/length-of-last-word/)
 
-Given a string `path`, which is an **absolute path** (starting with a `/`) to a file or directory in a Unix-style file system, simplify it. The simplified canonical path should have the following format:
-1. The path starts with a single `/`.
-2. Any two directories are separated by a single `/`.
-3. The path does not end with a trailing `/`.
-4. The path only contains the directories on the path from the root directory to the target file or directory (i.e., no `.` or `..`).
-
-Return the simplified canonical path.
+Given a string `s` consisting of words and spaces, return the length of the last word in the string. A word is defined as a contiguous sequence of non-space characters.
 
 ### Constraints:
-1. \( 1 \leq \text{path.length} \leq 3000 \)
-2. `path` consists of English letters, digits, period (`.`), slash (`/`), or an underscore (`_`).
-3. `path` is a valid absolute Unix path.
+1. `1 <= len(s) <= 10^4`
+2. `s` contains only English letters and spaces `' '`.
+3. There will always be at least one word in `s`.
 
 ### Examples:
 
-| Input                     | Output        |
-|---------------------------|---------------|
-| `path = "/home/"`         | `"/home"`     |
-| `path = "/../"`           | `"/"`         |
-| `path = "/home//foo/"`    | `"/home/foo"` |
+| Input                   | Output |
+|--------------------------|--------|
+| `"Hello World"`          | 5      |
+| `"   fly me   to   the moon  "` | 4      |
+| `"luffy is still joyboy"`| 6      |
 
 ---
 
 ## Solution Explanation
 
-This solution simplifies the Unix-style file path using a **stack-based approach**:
+This solution efficiently finds the length of the last word by using two pointers:
 
-### Steps:
+1. **Remove Trailing Spaces**:
+   - Start from the last character of the string and move backward to skip trailing spaces.
 
-1. **Split the Path**:
-   - Split the input string `path` into components using the `/` character.
-   - This gives a list of path elements.
+2. **Find the Last Word**:
+   - Use another pointer to traverse backward until a space is encountered or the start of the string is reached.
+   - The difference between the two pointers gives the length of the last word.
 
-2. **Initialize a Stack**:
-   - Use a stack to keep track of the valid directories.
+### Example Walkthrough:
 
-3. **Iterate Through Path Components**:
-   - Skip empty strings and `"."` (current directory).
-   - If the component is `".."` (parent directory), pop the last directory from the stack (if the stack is not empty).
-   - Otherwise, push valid directory names onto the stack.
+Input: `"   fly me   to   the moon  "`
 
-4. **Build the Simplified Path**:
-   - Join the stack elements with `/` and prepend a leading `/`.
-
-5. **Return the Result**:
-   - Return the canonical path as a string.
+1. Start from the last character (`j = 28`) and skip trailing spaces:
+   - `j = 23`, pointing to `'n'`.
+2. Traverse backward to find the last word:
+   - `i = 20`, pointing to `' '`.
+3. Length of the last word: `j - i = 23 - 20 = 4`.
 
 ---
 
@@ -66,16 +57,16 @@ This solution simplifies the Unix-style file path using a **stack-based approach
 
 ```python
 class Solution:
-    def simplifyPath(self, path: str) -> str:
-        stack = []
-        items = path.split("/")  # Split path into components
-
-        for i in items:
-            if i == "..":  # Go up a directory
-                if stack:
-                    stack.pop()
-            elif i != "" and i != ".":  # Valid directory name
-                stack.append(i)
+    def lengthOfLastWord(self, s: str) -> int:
+        j = len(s) - 1
         
-        # Join stack into a simplified path
-        return "/" + "/".join(stack)
+        # Skip trailing spaces
+        while s[j] == ' ':
+            j -= 1
+        
+        # Find the start of the last word
+        i = j
+        while i >= 0 and s[i] != ' ':
+            i -= 1
+        
+        return j - i
