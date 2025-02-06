@@ -16,9 +16,6 @@
 
 Given a perfect binary tree, populate each node's `next` pointer to point to its next right node. If there is no next right node, the `next` pointer should be set to `NULL`.
 
-### Constraints:
-1. The number of nodes in the tree is in the range `[0, 2^12 - 1]`.
-2. \( -1000 \leq \text{Node.val} \leq 1000 \)
 
 ---
 
